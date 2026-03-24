@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mods - Ravens Reach RPG</title>
     <link rel="stylesheet" href="style.css">
-    
+
     <style>
         /* --- CONFIGURAÇÕES GERAIS (WIKI MINECRAFT) --- */
         body {
@@ -103,7 +103,49 @@
             margin-left: 10px;
         }
 
+        .download-section {
+            max-width: 800px;
+            /* Limita o tamanho da caixa cinza */
+            margin: 30px auto;
+            /* Centraliza a caixa na tela */
+            padding: 30px;
+            background: #2a2a2a;
+            /* Cor de fundo para destacar */
+            border-radius: 8px;
+        }
 
+        .btn-download {
+            display: inline-flex;
+            /* Faz o botão se ajustar ao texto */
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: auto;
+            /* Remove o 100% que estava esticando */
+            min-width: 280px;
+            /* Garante que não fique pequeno demais */
+            max-width: 100%;
+            /* Não deixa vazar no celular */
+            padding: 15px 30px;
+            /* Espaço interno do botão */
+            margin: 10px auto;
+            /* Centraliza o botão */
+        }
+
+        .download-box {
+            display: flex;
+            justify-content: center;
+            /* Centraliza o botão dentro da área cinza */
+            width: 100%;
+        }
+
+        @media (max-width: 600px) {
+            .install-steps {
+                padding: 10px;
+                background: #1a1a1a;
+                border-radius: 4px;
+            }
+        }
 
         .mod-card p {
             font-size: 14px;
@@ -123,6 +165,37 @@
         .mod-info b {
             color: #FFAA00;
             /* Laranja para destaques de versão/autor */
+        }
+
+        /* Estilo do Botão de Download */
+        .btn-mine-main {
+            background: #55FF55;
+            /* Verde Minecraft */
+            color: #000 !important;
+            padding: 15px 25px;
+            border: 3px solid #000;
+            box-shadow: inset -4px -4px 0px #00AA00, inset 4px 4px 0px #AAFFAA;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        @media (max-width: 768px) {
+            .mods-container h1 {
+                font-size: 1.8rem;
+            }
+
+            .mod-grid {
+                grid-template-columns: 1fr;
+                /* Uma coluna só no celular */
+                padding: 0 15px;
+            }
+
+            .download-section {
+                margin: 20px 10px;
+                padding: 15px;
+            }
         }
     </style>
 </head>
@@ -170,7 +243,7 @@
 
     <main class="container mods-container">
         <h1 style="text-align: center; color: #a68a4c;">WIKI DO MODPACK</h1>
-        
+
         <h2 class="category-title">Sistemas Principais</h2>
         <div class="mod-grid">
             <div class="mod-card">
@@ -226,6 +299,37 @@
         </div>
 
     </main>
+
+    <div class="card download-section">
+        <h3 style="text-align: center; color: #fff;">PACOTE DE AVENTUREIRO (COMPLETO)</h3>
+        <p style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">
+            Baixe tudo de uma vez: Mods + Texturas + Shaders + Configurações.
+        </p>
+
+        <div class="download-box">
+            <a href="https://wa.me/5538999293555" class="btn-mine-main btn-download" target="_blank">
+                <span>📥 BAIXAR MODPACK V1.0 (.ZIP)</span>
+            </a>
+        </div>
+
+        <div class="install-steps" style="margin-top: 30px; color: #ccc;">
+            <p><strong style="color: #FFFF55;">Como instalar:</strong></p>
+            <ol style="font-size: 13px; line-height: 1.8;">
+                <li>Extraia o arquivo <b>.zip</b> baixado.</li>
+                <li>Mova a pasta <b>mods</b> para dentro da sua pasta <b>.minecraft</b>.</li>
+                <li>Ative a <b>Texture Pack</b> e os <b>Shaders</b> nas configurações dentro do jogo.</li>
+            </ol>
+
+            <div
+                style="margin-top: 15px; background: rgba(37, 211, 102, 0.1); padding: 15px; border-left: 4px solid #25D366;">
+                <span style="font-size: 12px;">Dúvidas? Fale com o suporte:</span><br>
+                <a href="https://wa.me/5538999293555" target="_blank"
+                    style="color: #25D366; text-decoration: none; font-weight: bold;">
+                    💬 Chamar no WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
 
 
     <script src="script.js"></script>
