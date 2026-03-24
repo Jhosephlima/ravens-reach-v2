@@ -239,3 +239,28 @@ function solicitarExclusao() {
         });
     }
 }
+async function checkMinecraftStatus() {
+    try {
+        // Ele pergunta para o seu servidor no Render
+        const response = await fetch('https://ravens-reach-v2.onrender.com/status-mine');
+        const data = await response.json();
+        
+        const statusDiv = document.getElementById('status-servidor'); 
+        
+        if (data.online) {
+            statusDiv.innerHTML = `
+                <span style="color: #00ff00; font-weight: bold;">● Online</span> 
+                <p style="margin: 5px 0;">${data.players} / ${data.maxPlayers} Jogadores</p>
+            `;
+        } else {
+            statusDiv.innerHTML = `<span style="color: #ff0000; font-weight: bold;">● Offline</span>`;
+        }
+    } catch (err) {
+        console.log("Erro ao buscar status do mine");
+    }
+}
+
+// Inicia a verificação
+checkMinecraftStatus();
+// Atualiza o status a cada 60 segundos
+setInterval(checkMinecraftStatus, 60000);
