@@ -33,12 +33,10 @@ function toggleDropdown() {
 
 function atualizarInterfaceUsuario(username) {
     if (!username) return;
-
     const loginLi = document.getElementById('btn-login-li');
     const regLi = document.getElementById('btn-reg-li');
     const userInfo = document.getElementById('user-logged-info');
     const navUser = document.getElementById('nav-username');
-
     if (loginLi) loginLi.style.display = 'none';
     if (regLi) regLi.style.display = 'none';
     if (userInfo) userInfo.style.display = 'block';
@@ -47,7 +45,7 @@ function atualizarInterfaceUsuario(username) {
 
 function logout() {
     localStorage.removeItem('loggedUser');
-    window.location.href = "index.html"; // Sai da pasta abs e volta pra home
+    window.location.href = "index.html";
 }
 
 // --- 3. LÓGICA DE LOGIN ---
@@ -82,8 +80,6 @@ window.onload = async () => {
     const loggedUser = localStorage.getItem('loggedUser');
     if (loggedUser) {
         atualizarInterfaceUsuario(loggedUser);
-
-        // Elementos de perfil
         const usernameDisplay = document.getElementById('username-display');
         const emailField = document.getElementById('email');
         const phoneField = document.getElementById('phone');
@@ -96,13 +92,10 @@ window.onload = async () => {
         try {
             const response = await fetch(`https://ravens-reach-v2.onrender.com/get-profile/${loggedUser}`);
             const data = await response.json();
-
             if (response.ok) {
-                // Como o html está em 'abs/', precisamos voltar uma pasta (../) para achar as imagens default
                 const fotoUrl = data.profile_img || '../assets/default_steve.png';
                 if (navAvatar) navAvatar.src = fotoUrl;
                 if (userAvatar) userAvatar.src = fotoUrl;
-
                 if (emailField) emailField.value = data.email || "";
                 if (phoneField) phoneField.value = data.phone || "";
                 if (nicknameField) nicknameField.value = data.nickname || "";
@@ -130,40 +123,25 @@ if (fileInput) {
 
 const profileForm = document.getElementById('profile-form');
 if (profileForm) profileForm.addEventListener('submit', async function(event) {
-    if (event) event.preventDefault();
+    event.preventDefault();
     const username = localStorage.getItem('loggedUser');
     const formData = new FormData();
-
-    const emailVal = document.getElementById('email')?.value || "";
-    const phoneVal = document.getElementById('phone')?.value || "";
-    const nickVal = document.getElementById('nickname')?.value || "";
-
     formData.append('username', username);
-    formData.append('email', emailVal);
-    formData.append('phone', phoneVal);
-    formData.append('nickname', nickVal);
-
+    formData.append('email', document.getElementById('email')?.value || "");
+    formData.append('phone', document.getElementById('phone')?.value || "");
+    formData.append('nickname', document.getElementById('nickname')?.value || "");
     const fileInput = document.getElementById('file-input');
-
     if (fileInput && fileInput.files[0]) {
         formData.append('profile_img', fileInput.files[0]);
-    } else {
-        const currentSrc = document.getElementById('user-avatar')?.src || "";
-        formData.append('profile_img', currentSrc);
     }
-
     try {
         const response = await fetch('https://ravens-reach-v2.onrender.com/update-profile', {
             method: 'POST',
             body: formData
         });
-
-        const data = await response.json();
         if (response.ok) {
             alert("✅ Alterações salvas!");
             location.reload();
-        } else {
-            alert("❌ Erro: " + data.message);
         }
     } catch (error) {
         alert("Erro de conexão.");
@@ -178,21 +156,16 @@ if (registerForm) {
         const username = document.getElementById('regUser').value;
         const email = document.getElementById('regEmail').value;
         const password = document.getElementById('regPass').value;
-
         try {
             const response = await fetch('https://ravens-reach-v2.onrender.com/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, email, password })
             });
-            const data = await response.json();
-
             if (response.ok) {
-                alert("✅ " + data.message);
+                alert("✅ Cadastro realizado!");
                 closeAuth('registerModal');
                 openAuth('loginModal');
-            } else {
-                alert("❌ Erro: " + data.message);
             }
         } catch (error) {
             alert("Erro de conexão.");
@@ -203,93 +176,83 @@ if (registerForm) {
 // --- 7. DELETAR CONTA ---
 function solicitarExclusao() {
     const senha = document.getElementById('senhaConfirmacao').value;
-    const username = localStorage.getItem('loggedUser'); // Precisamos saber QUEM está logado
-
-    if (!username) {
-        alert("Você precisa estar logado para apagar a conta!");
+    const username = localStorage.getItem('loggedUser');
+    if (!username || !senha) {
+        alert("Preencha os dados para confirmar!");
         return;
     }
-
-    if (!senha) {
-        alert("Você precisa digitar sua senha para confirmar!");
-        return;
-    }
-
-    if (confirm("TEM CERTEZA? Esta ação não pode ser desfeita e você será deslogado imediatamente.")) {
-        
-        // O LINK CORRIGIDO! Agora ele acha o servidor.
+    if (confirm("TEM CERTEZA?")) {
         fetch('https://ravens-reach-v2.onrender.com/deletar-conta', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: username, senha: senha })
+            body: JSON.stringify({ username, senha })
         })
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                alert("Sua conta foi apagada. Até a próxima, aventureiro!");
-                localStorage.removeItem('loggedUser'); // Limpa o login do navegador
-                window.location.href = "index.html"; // Sai de /abs e volta pro inicio
-            } else {
-                alert("Erro: " + data.message);
+                localStorage.removeItem('loggedUser');
+                window.location.href = "index.html";
             }
-        })
-        .catch(err => {
-            console.error(err);
-            alert("Erro ao conectar com o servidor.");
         });
     }
 }
 
+// --- 8. STATUS DO MINECRAFT (UNIFICADO) ---
 async function checkMinecraftStatus() {
     try {
         const response = await fetch('https://ravens-reach-v2.onrender.com/status-mine');
         const data = await response.json();
-        
-        // Pegando os elementos do seu Portal de Status
-        const reinoStatus = document.getElementById('reino-status'); // Onde diz OFFLINE
-        const aventureirosText = document.getElementById('aventureiros-contagem'); // Onde diz 0 / 0
-        const latenciaText = document.getElementById('latencia-valor'); // Onde está o ---
-        
-        if (data.online) {
-            // Se estiver online, muda para Verde e atualiza os números
-            reinoStatus.innerHTML = "ONLINE";
-            reinoStatus.style.color = "#00ff00"; 
-            aventureirosText.innerHTML = `${data.players} / ${data.maxPlayers}`;
-            latenciaText.innerHTML = "Estável"; // Ou você pode calcular o tempo de resposta
-        } else {
-            // Se estiver offline
-            reinoStatus.innerHTML = "OFFLINE";
-            reinoStatus.style.color = "#ff4444";
-            aventureirosText.innerHTML = "0 / 0";
-            latenciaText.innerHTML = "---";
+
+        // 1. Atualiza a Home (ID: status-servidor)
+        const statusDivHome = document.getElementById('status-servidor');
+        if (statusDivHome) {
+            if (data.online) {
+                statusDivHome.innerHTML = `<span style="color: #00ff00; font-weight: bold;">● Online</span> <p>${data.players} / ${data.maxPlayers}</p>`;
+            } else {
+                statusDivHome.innerHTML = `<span style="color: #ff0000; font-weight: bold;">● Offline</span>`;
+            }
+        }
+
+        // 2. Atualiza o Portal de Status (IDs: server-status, player-count, player-list)
+        const reinoStatus = document.getElementById('server-status');
+        const countEl = document.getElementById('player-count');
+        const listEl = document.getElementById('player-list');
+
+        if (reinoStatus) {
+            if (data.online) {
+                reinoStatus.innerText = "ONLINE";
+                reinoStatus.style.color = "#55FF55";
+                if (countEl) countEl.innerText = `${data.players} / ${data.maxPlayers}`;
+                
+                // Preenche a tabela sem o erro de 'undefined'
+                if (listEl) {
+                    if (data.playerList && data.playerList.length > 0) {
+                        listEl.innerHTML = data.playerList.map(player => {
+                            const nickname = typeof player === 'string' ? player : (player.name || "Aventureiro");
+                            return `
+                                <tr>
+                                    <td><img src="https://mc-heads.net/avatar/${nickname}/32" class="avatar-img"></td>
+                                    <td style="color: #fff; font-weight: bold;">${nickname}</td>
+                                    <td><small>24ms</small></td>
+                                    <td><span class="status-badge online">EM JOGO</span></td>
+                                </tr>`;
+                        }).join('');
+                    } else {
+                        listEl.innerHTML = '<tr><td colspan="4">Nenhum herói online.</td></tr>';
+                    }
+                }
+            } else {
+                reinoStatus.innerText = "OFFLINE";
+                reinoStatus.style.color = "#ff4444";
+                if (countEl) countEl.innerText = "0 / 0";
+                if (listEl) listEl.innerHTML = '<tr><td colspan="4">Servidor desligado.</td></tr>';
+            }
         }
     } catch (err) {
-        console.log("Erro ao conectar com o Portal de Status");
+        console.log("Erro ao buscar status do servidor.");
     }
 }
 
-async function checkMinecraftStatus() {
-    try {
-        // Ele pergunta para o seu servidor no Render
-        const response = await fetch('https://ravens-reach-v2.onrender.com/status-mine');
-        const data = await response.json();
-        
-        const statusDiv = document.getElementById('status-servidor'); 
-        
-        if (data.online) {
-            statusDiv.innerHTML = `
-                <span style="color: #00ff00; font-weight: bold;">● Online</span> 
-                <p style="margin: 5px 0;">${data.players} / ${data.maxPlayers} Jogadores</p>
-            `;
-        } else {
-            statusDiv.innerHTML = `<span style="color: #ff0000; font-weight: bold;">● Offline</span>`;
-        }
-    } catch (err) {
-        console.log("Erro ao buscar status do mine");
-    }
-}
-
-// Inicia a verificação
+// Inicializa o status e atualiza a cada 30 segundos
 checkMinecraftStatus();
-// Atualiza o status a cada 60 segundos
-setInterval(checkMinecraftStatus, 60000);
+setInterval(checkMinecraftStatus, 30000);
