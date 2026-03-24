@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ravens Reach RPG - Minecraft Server</title>
+    <link rel="stylesheet" href="style.css">
+
+
+</head>
+
+<body>
+
+
+    <header>
+        <div class="container navbar">
+            <div class="logo">
+                <img src="assets/logo.png" alt="Logo">
+                <span>RAVENS REACH<br>RPG</span>
+            </div>
+
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">HOME</a></li>
+                    <li><a href="mods.html">MODS</a></li>
+                    <li><a href="recursos.html">RECURSOS</a></li>
+                    <li><a href="quests.html">MISSÕES</a></li>
+                    <li><a href="classe.html">CLASSES</a></li>
+                    <li><a href="status.html">PLAYERS</a></li>
+                    <li><a href="#">STORE</a></li>
+                    
+
+                    <li id="user-logged-info" style="display: none; position: relative; list-style: none;">
+                        <div class="user-profile-nav" onclick="toggleDropdown()"
+                            style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px;">
+                            <img src="assets/default_steve.png" id="nav-avatar"
+                                style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid #a68a4c; object-fit: cover;">
+
+                            <span id="nav-username"
+                                style="font-weight: 800; text-transform: uppercase; color: #fff; letter-spacing: 1px;">CARREGANDO...</span>
+                            <div id="profile-dropdown">
+                                <a href="perfil.html">⚙️ CONFIGURAÇÕES</a>
+                                <a href="#" onclick="logout()">🚪 SAIR DA CONTA</a>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li id="btn-login-li">
+                        <a href="javascript:void(0)" onclick="openAuth('loginModal')" class="btn-play-nav">LOGIN</a>
+                    </li>
+
+                    <li id="btn-reg-li">
+                        <a href="javascript:void(0)" onclick="openAuth('registerModal')"
+                            class="btn-play-nav">CADASTRO</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="minecraft-logo-container">
+                <img src="assets/logotipo.png" alt="Logotipo RPG" class="minecraft-logo">
+            </div>
+            <p class="section-subtitle">Junte-se a Kaelen, Lyra e Brom nas terras de Ravens Reach.</p>
+
+            <div class="server-status-container">
+                <div class="status-indicator">
+                    <span class="status-dot-pulse"></span>
+                    <span class="status-text">SERVIDOR ONLINE</span>
+                </div>
+
+                <div class="player-count">
+                    <span class="count-number">01</span>
+                    <span class="count-label">JOGADORES EXPLORANDO</span>
+                </div>
+
+                <div class="capacity-bar-bg">
+                    <div class="capacity-bar-fill" style="width: 42%;"></div>
+                </div>
+            </div>
+
+            <div class="hero-actions" style="margin-top: 30px; display: flex; gap: 15px; justify-content: center;">
+                <a href="recursos.html" class="btn-primary"
+                    style="background: #a68a4c; color: #000; padding: 12px 25px; text-decoration: none; font-weight: bold; border-radius: 4px;">VER
+                    RECURSOS</a>
+                <a href="mods.html" class="btn-secondary"
+                    style="border: 1px solid #a68a4c; padding: 12px 25px; color: #a68a4c; text-decoration: none; font-weight: bold; border-radius: 4px;">LISTA
+                    DE MODS</a>
+            </div>
+        </div>
+    </section>
+
+    <main class="container grid-content">
+        <div class="card">
+            <h3>WORLD MAP</h3>
+            <div class="map-container">
+                <img src="assets/mapa.png" id="myImg" alt="Map" style="width:100%; cursor:pointer;"
+                    onclick="openModal()">
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>LATEST NEWS</h3>
+            <div class="news-item">
+                <span class="news-title">Raven's Reach</span>
+                <p>O mistério da corrupção cósmica se espalha...</p>
+                <a href="#">Read more</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="ip-block-wrapper">
+                <div class="ip-container" onclick="copyIP()">
+                    <div class="ip-text-group">
+                        <span class="label">SERVER IP:</span>
+                        <span id="server-ip">JOGAR.RAVENSREACH.COM</span>
+                    </div>
+                    <button class="btn-copy">COPIAR IP</button>
+                </div>
+            </div>
+
+
+        </div>
+    </footer>
+    <div id="loginModal" class="auth-modal">
+        <div class="auth-content minecraft-gui">
+            <span class="close-modal" onclick="closeAuth('loginModal')">&times;</span>
+
+            <div class="gui-header">
+                <img src="assets/logo.png" class="gui-logo-pixel">
+                <h2 class="gui-title">LOGIN DO AVENTUREIRO</h2>
+            </div>
+
+            <form id="formLogin">
+                <div class="mine-input-group">
+                    <label>NOME DE USUÁRIO</label>
+                    <input type="text" id="loginUser" placeholder="Ex: Steve_Guerreiro" required>
+                </div>
+
+                <div class="mine-input-group">
+                    <label>SENHA SECRETA</label>
+                    <input type="password" id="loginPass" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-mine-main">
+                    <span>ENTRAR NO REINO</span>
+                </button>
+            </form>
+
+            <p class="gui-footer-text">Esqueceu a chave do castelo? <a href="#">Clique aqui</a></p>
+        </div>
+    </div>
+
+    <div id="registerModal" class="auth-modal">
+        <div class="auth-content minecraft-gui">
+            <span class="close-modal" onclick="closeAuth('registerModal')">&times;</span>
+
+            <div class="gui-header">
+                <h2 class="gui-title">CADASTRO</h2>
+            </div>
+
+            <form id="formRegister">
+                <div class="mine-input-group">
+                    <label>NICKNAME</label>
+                    <input type="text" id="regUser" placeholder="Seu nome no jogo" required>
+                </div>
+
+                <div class="mine-input-group">
+                    <label>E-MAIL</label>
+                    <input type="email" id="regEmail" placeholder="aventureiro@reino.com" required>
+                </div>
+
+                <div class="mine-input-group">
+                    <label>SENHA</label>
+                    <input type="password" id="regPass" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-mine-main">
+                    <span>CRIAR CONTA</span>
+                </button>
+            </form>
+
+            <p class="gui-footer-text">Já possui acesso? <a href="javascript:void(0)"
+                    onclick="closeAuth('registerModal'); openAuth('loginModal')">Fazer Login</a></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="footer.js"></script>
+</body>
+
+</html>

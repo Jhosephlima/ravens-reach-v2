@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes - HyturCraft Wiki</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* Estilo para a Grade de Classes */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+        }
+
+
+
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Card de Classe Estilo GUI Minecraft */
+        .class-card {
+            background: #2a2a2a;
+            border: 2px solid #333;
+            padding: 20px;
+            position: relative;
+            transition: 0.3s;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .class-card:hover {
+            border-color: #55FF55;
+            transform: scale(1.02);
+        }
+
+        .class-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Tags de Categoria com alto contraste */
+        .tag {
+            font-size: 15px;
+            font-family: 'Courier New', monospace;
+            padding: 3px 12px;
+            background: #111;
+            font-weight: bold;
+            border: 1px solid;
+            box-shadow: 1px 1px 0px #000;
+        }
+
+        .guerreiro {
+            color: #FF5555;
+            border-color: #FF5555;
+        }
+
+        .mago {
+            color: #AA00AA;
+            border-color: #AA00AA;
+        }
+
+        .mistica {
+            color: #d64f00;
+            border-color: #d64f00;
+        }
+
+        .agilidade {
+            color: #55FFFF;
+            border-color: #55FFFF;
+        }
+
+        .raca {
+            color: #FFAA00;
+            border-color: #FFAA00;
+        }
+
+        .suporte {
+            color: #55FF55;
+            border-color: #55FF55;
+        }
+
+
+        .class-desc {
+            font-size: 13px;
+            color: #bbb;
+            line-height: 1.4;
+        }
+
+        /* Container Principal */
+        .game-preview {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 2px solid #333;
+            border-radius: 4px;
+        }
+
+        .preview-title {
+            text-align: center;
+            color: #55FF55;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px #000;
+        }
+
+        /* Grade para as fotos não ficarem grudadas ou bugadas */
+        .gallery-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            /* Espaço entre as molduras */
+            justify-content: center;
+        }
+
+        /* Moldura estilo GUI Minecraft */
+        .mc-frame {
+            flex: 1;
+            min-width: 300px;
+            /* Não deixa ficar pequeno demais */
+            max-width: 450px;
+            border: 4px solid #373737;
+            outline: 4px solid #000;
+            background: #1e1e1e;
+            position: relative;
+            padding: 8px;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .mc-frame:hover {
+            transform: translateY(-5px);
+            /* Sobe um pouco ao passar o mouse */
+            border-color: #55FF55;
+        }
+
+        .mc-frame img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: 2px solid #000;
+        }
+
+        /* Legenda estilo Item Tooltip corrigida */
+        /* Legenda centralizada estilo Tooltip do Minecraft */
+        .frame-caption {
+            background: rgba(30, 0, 60, 0.95);
+            color: #AA00AA;
+            border: 2px solid #280048;
+            padding: 6px 15px;
+
+            /* Mágica para centralizar */
+            position: absolute;
+            bottom: 15px;
+            /* Distância do fundo */
+            left: 50%;
+            /* Move para o meio */
+            transform: translateX(-50%);
+            /* Ajusta o ponto central exato */
+
+            white-space: nowrap;
+            /* Impede que o texto quebre linha */
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            font-weight: bold;
+            text-shadow: 2px 2px #000;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Não atrapalha o clique */
+        
+
+        /* Ajuste para celulares */
+        @media (max-width: 768px) {
+            .mc-frame {
+                max-width: 100%;
+            }
+        }
+
+        /* Estilo do Fundo do Zoom */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            cursor: zoom-out;
+        }
+
+        /* A Imagem em Zoom */
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 1000px;
+            border: 4px solid #373737;
+            outline: 4px solid #000;
+            animation: zoom 0.3s;
+        }
+
+        @keyframes zoom {
+            from {
+                transform: scale(0)
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+
+        /* Botão de Fechar */
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #55FF55;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container navbar">
+            <div class="logo">
+                <img src="assets/logo.png" alt="Logo">
+                <span>RAVENS REACH<br>RPG</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="mods.html">MODS</a></li>
+                    <li><a href="recursos.html">RECURSOS</a></li>
+                    <li><a href="quests.html">MISSÕES</a></li>
+                    <li><a href="classe.html" class="active">CLASSE</a></li>
+                    <li><a href="status.html">PLAYERS</a></li>
+                    <li><a href="#">STORE</a></li>
+
+
+                    <li id="user-logged-info" style="display: none; position: relative; list-style: none;">
+                        <div class="user-profile-nav" onclick="toggleDropdown()"
+                            style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px;">
+                            <img src="assets/default_steve.png" id="nav-avatar"
+                                style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid #a68a4c; object-fit: cover;">
+                            <span id="nav-username"
+                                style="font-weight: 800; text-transform: uppercase; color: #fff; letter-spacing: 1px;">CARREGANDO...</span>
+                            <div id="profile-dropdown"
+                                style="display: none; position: absolute; top: 110%; right: 0; background: #111; border: 1px solid #a68a4c; min-width: 180px; z-index: 10000;">
+                                <a href="perfil.html"
+                                    style="display: block; padding: 12px; color: white; text-decoration: none; font-size: 12px; border-bottom: 1px solid #222;">⚙️
+                                    CONFIGURAÇÕES</a>
+                                <a href="#" onclick="logout()"
+                                    style="display: block; padding: 12px; color: #ff4444; text-decoration: none; font-size: 12px;">🚪
+                                    SAIR DA CONTA</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="classes-container">
+        <h1 style="text-align: center; color: #FFD700; text-shadow: 2px 2px #000; margin-bottom: 50px;">CLASSES DO REINO
+        </h1>
+
+        <div class="gallery-grid">
+            <div class="mc-frame">
+                <img src="assets/class1.png" alt="Menu de Linhagem" onclick="openModal(this)">
+                <div class="frame-caption">Opções de origem</div><br><br>
+            </div>
+
+            <div class="mc-frame">
+                <img src="assets/class2.jpg" alt="Árvore de Habilidades" onclick="openModal(this)">
+                <div class="frame-caption">Opções de origem</div>
+            </div>
+        </div>
+
+        <div id="zoomModal" class="modal" onclick="this.style.display='none'">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="imgZoom">
+            <div id="caption"></div>
+        </div>
+
+        <br><br>
+
+        <div class="class-grid">
+            <div class="class-card">
+                <h3>Human <span class="tag suporte">SUPORTE</span></h3>
+                <p class="class-desc">O equilíbrio total, sem vantagens ou desvantagens iniciais.</p>
+            </div>
+            <div class="class-card">
+                <h3>Miner <span class="tag suporte">SUPORTE</span></h3>
+                <p class="class-desc">Quebra blocos com velocidade incrível e tem faro para encontrar minérios raros.
+                </p>
+            </div>
+            <div class="class-card">
+                <h3>Farmer <span class="tag suporte">SUPORTE</span></h3>
+                <p class="class-desc">As plantações crescem instantaneamente ao seu redor e colhe o dobro de alimentos.
+                </p>
+            </div>
+            <div class="class-card">
+                <h3>Merchant <span class="tag suporte">SUPORTE</span></h3>
+                <p class="class-desc">Possui lábia para conseguir as melhores trocas e descontos com os Villagers.</p>
+            </div>
+            <div class="class-card">
+                <h3>Cleric <span class="tag suporte">SUPORTE</span></h3>
+                <p class="class-desc">O curandeiro puro do grupo, focado totalmente em regeneração e suporte vital.</p>
+            </div>
+            <div class="class-card">
+                <h3>Bard <span class="tag suporte">SUPORTE</span></h3>
+                <p class="class-desc">Utiliza canções mágicas para fortalecer os atributos de todos os aliados próximos.
+                </p>
+            </div>
+            <div class="class-card">
+                <h3>Cinderella <span class="tag raca">RAÇA</span></h3>
+                <p class="class-desc">Bônus em tarefas domésticas e interação com animais moficados.</p>
+            </div>
+            <div class="class-card">
+                <h3>Blacksmith <span class="tag raca">RAÇA</span></h3>
+                <p class="class-desc">Mestre da forja. Conserta equipamentos e gasta muito menos XP em bigornas.</p>
+            </div>
+            <div class="class-card">
+                <h3>Werewolf <span class="tag raca">RAÇA</span></h3>
+                <p class="class-desc">Torna-se uma fera poderosa durante a noite, mas fica vulnerável durante o dia.</p>
+            </div>
+            <div class="class-card">
+                <h3>Vampire <span class="tag raca">RAÇA</span></h3>
+                <p class="class-desc">Queima sob a luz do sol, mas pode drenar a vida de seus inimigos para se curar.
+                </p>
+            </div>
+            <div class="class-card">
+                <h3>Avian <span class="tag raca">RAÇA</span></h3>
+                <p class="class-desc">Cai lentamente e possui vôo limitado, porém seu organismo não aceita carne.</p>
+            </div>
+            <div class="class-card">
+                <h3>Arachnid <span class="tag raca">RAÇA</span></h3>
+                <p class="class-desc">Capaz de escalar qualquer parede e prender seus inimigos em teias pegajosas.</p>
+            </div>
+            <div class="class-card">
+                <h3>Merling <span class="tag raca">RAÇA</span></h3>
+                <p class="class-desc">O senhor dos oceanos. Respira debaixo d'água, mas sufoca se ficar muito tempo em
+                    terra.</p>
+            </div>
+            <div class="class-card">
+                <h3>Blazeborn <span class="tag raca">RAÇA</span></h3>
+                <p class="class-desc">Nascido no Nether, é totalmente imune ao fogo, mas sofre dano ao tocar na água ou
+                    chuva.</p>
+            </div>
+            <div class="class-card">
+                <h3>Shulk <span class="tag raca">RAÇA</span></h3>
+                <p class="class-desc">Possui uma carapaça protetora e inventário extra, mas sua fome aumenta muito
+                    rápido.</p>
+            </div>
+            <div class="class-card">
+                <h3>Feline <span class="tag raca">RAÇA</span></h3>
+                <p class="class-desc">Nunca sofre dano de queda, pula muito alto e assusta Creepers naturalmente.</p>
+            </div>
+            <div class="class-card">
+                <h3>Warrior <span class="tag guerreiro">LUTA</span></h3>
+                <p class="class-desc">Especialista em combate corpo a corpo e armas pesadas.</p>
+            </div>
+            <div class="class-card">
+                <h3>Knight <span class="tag guerreiro">LUTA</span></h3>
+                <p class="class-desc">Alta defesa física, ideal para tankar hordas de monstros.</p>
+            </div>
+
+            <div class="class-card">
+                <h3>Berserker <span class="tag guerreiro">LUTA</span></h3>
+                <p class="class-desc">Dano aumentado drasticamente conforme sua vida diminui.</p>
+            </div>
+            <div class="class-card">
+                <h3>Guardian <span class="tag guerreiro">LUTA</span></h3>
+                <p class="class-desc">Focado em proteger aliados e resistir a grandes quantidades de dano.</p>
+            </div>
+            <div class="class-card">
+                <h3>Paladin <span class="tag guerreiro">LUTA</span></h3>
+                <p class="class-desc">Uma mistura poderosa de combate físico com magias de cura sagrada.</p>
+            </div>
+            <div class="class-card">
+                <h3>Berserker <span class="tag guerreiro">LUTA</span></h3>
+                <p class="class-desc">Um guerreiro furioso que fica mais forte conforme sua vida diminui.</p>
+            </div>
+            <div class="class-card">
+                <h3>Gladiator <span class="tag guerreiro">LUTA</span></h3>
+                <p class="class-desc">Recebe bônus de dano massivos quando está cercado por vários inimigos.</p>
+            </div>
+            <div class="class-card">
+                <h3>Mage <span class="tag mago">MAGIA</span></h3>
+                <p class="class-desc">Mestre das artes arcanas e do sistema de mana do servidor.</p>
+            </div>
+            <div class="class-card">
+                <h3>Necromancer <span class="tag mago">MAGIA</span></h3>
+                <p class="class-desc">Capacidade de invocar lacaios mortos-vivos para auxílio.</p>
+            </div>
+            <div class="class-card">
+                <h3>Pyromancer <span class="tag mago">MAGIA</span></h3>
+                <p class="class-desc">Especialista em dano de fogo, explosões e total imunidade a chamas.</p>
+            </div>
+            <div class="class-card">
+                <h3>Cryomancer <span class="tag mago">MAGIA</span></h3>
+                <p class="class-desc">Domina o gelo para congelar inimigos e possui a habilidade de caminhar sobre a
+                    água.</p>
+            </div>
+            <div class="class-card">
+                <h3>Electromancer <span class="tag mago">MAGIA</span></h3>
+                <p class="class-desc">Utiliza o poder dos raios para ataques velozes e alta mobilidade no campo.</p>
+            </div>
+            <div class="class-card">
+                <h3>Warlock <span class="tag mago">MAGIA</span></h3>
+                <p class="class-desc">Mestre das trevas que utiliza maldições para enfraquecer e drenar seus alvos.</p>
+            </div>
+            <div class="class-card">
+                <h3>Enchanter <span class="tag mago">MAGIA</span></h3>
+                <p class="class-desc">Focado em aprimorar os equipamentos e atributos de todos os seus aliados.</p>
+            </div>
+            <div class="class-card">
+                <h3>Alchemist <span class="tag mago">MAGIA</span></h3>
+                <p class="class-desc">Especialista no preparo de poções arremessáveis e efeitos químicos de área.</p>
+            </div>
+            <div class="class-card">
+                <h3>Elytrian <span class="tag agilidade">AGILIDADE</span></h3>
+                <p class="class-desc">Possui asas naturais (Elytra), mas não pode usar peitorais pesados.</p>
+            </div>
+            <div class="class-card">
+                <h3>Archer <span class="tag agilidade">AGILIDADE</span></h3>
+                <p class="class-desc">Possui precisão extrema e bônus de dano com arcos, bestas e flechas especiais.</p>
+            </div>
+            <div class="class-card">
+                <h3>Hunter <span class="tag agilidade">AGILIDADE</span></h3>
+                <p class="class-desc">Mestre em rastrear criaturas e obter muito mais recursos ao abater animais.</p>
+            </div>
+            <div class="class-card">
+                <h3>Rogue <span class="tag agilidade">AGILIDADE</span></h3>
+                <p class="class-desc">Especialista em furtividade, podendo ficar invisível e causar dano crítico por
+                    trás.</p>
+            </div>
+            <div class="class-card">
+                <h3>Assassin <span class="tag agilidade">AGILIDADE</span></h3>
+                <p class="class-desc">Extremamente veloz e letal, porém possui pouca resistência a ataques diretos.</p>
+            </div>
+            <div class="class-card">
+                <h3>Scout <span class="tag agilidade">AGILIDADE</span></h3>
+                <p class="class-desc">Possui visão noturna natural e alta velocidade de movimento em campos abertos.</p>
+            </div>
+            <div class="class-card">
+                <h3>Spirit <span class="tag mistica">MÍSTICA</span></h3>
+                <p class="class-desc">Pode atravessar alguns blocos sólidos, mas tem dificuldade em interagir com itens
+                    físicos.</p>
+            </div>
+            <div class="class-card">
+                <h3>Phantom <span class="tag mistica">MÍSTICA</span></h3>
+                <p class="class-desc">Entra em estado de fantasma ao se agachar, ficando invisível ao custo de muita
+                    energia.</p>
+            </div>
+            <div class="class-card">
+                <h3>Elf <span class="tag mistica">MÍSTICA</span></h3>
+                <p class="class-desc">Mestre da natureza com bônus em arquearia e magias baseadas em elementos da
+                    floresta.</p>
+            </div>
+            <div class="class-card">
+                <h3>Golem <span class="tag mistica">MÍSTICA</span></h3>
+                <p class="class-desc">Feito de pedra e metal, possui a maior resistência do jogo, mas afunda na água.
+                </p>
+            </div>
+            <div class="class-card">
+                <h3>Dwarf <span class="tag mistica">MÍSTICA</span></h3>
+                <p class="class-desc">Resistente a venenos e especialista em combate dentro de cavernas e locais
+                    fechados.</p>
+            </div>
+            <div class="class-card">
+                <h3>Dragonborn <span class="tag mistica">MÍSTICA</span></h3>
+                <p class="class-desc">Descendente de dragões, pode soprar fogo e possui uma pele resistente como
+                    escamas.</p>
+            </div>
+            <div class="class-card">
+                <h3>Enderian <span class="tag mistica">MÍSTICA</span></h3>
+                <p class="class-desc">Pode se teleportar livremente, mas sofre muito dano na água.</p>
+            </div>
+        </div>
+    </div>
+    <br><br>
+
+
+
+    <script src="script.js"></script>
+    <script src="footer.js"></script>
+    <script>
+        function openModal(element) {
+            document.getElementById("zoomModal").style.display = "block";
+            document.getElementById("imgZoom").src = element.src;
+            document.getElementById("caption").innerHTML = element.alt;
+        }
+    </script>
+
+</body>
+
+</html>

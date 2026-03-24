@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mods - Ravens Reach RPG</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* --- CONFIGURAÇÕES GERAIS (WIKI MINECRAFT) --- */
+        body {
+            background-color: #1a1a1a;
+            /* Escuro como o fundo das GUIs */
+            color: #AAAAAA;
+            /* Cinza das descrições do jogo */
+            margin: 0;
+            font-family: 'Segoe UI', 'Verdana', sans-serif;
+        }
+
+        /* Título Principal da Wiki */
+        .mods-container h1 {
+            color: #FFFFFF !important;
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 3px 3px #000;
+            /* Sombra clássica de texto do jogo */
+            margin-top: 50px;
+            font-size: 2.5rem;
+        }
+
+        .mods-container {
+            padding: 40px 0;
+        }
+
+        /* Títulos de Categoria (Ex: Mods de Otimização, Magia, etc) */
+        .category-title {
+            color: #FFFF55;
+            /* Amarelo brilhante de item raro */
+            border-left: 5px solid #FFFF55;
+            padding-left: 15px;
+            margin: 40px 0 20px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px #3f3f00;
+        }
+
+        .mod-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* --- CARD DE MOD (ESTILO SLOT DE INVENTÁRIO) --- */
+        .mod-card {
+            background: #4D4D4D;
+            /* Cinza pedra */
+            border: 3px solid #000;
+            padding: 20px;
+            /* Efeito de relevo 3D do Minecraft */
+            box-shadow: inset -4px -4px 0px #222, inset 4px 4px 0px #888;
+            transition: 0.2s;
+        }
+
+        .mod-card:hover {
+            background: #5D5D5D;
+            border-color: #FFFFFF;
+            /* Destaque branco ao passar o mouse */
+            transform: translateY(-5px);
+        }
+
+        .mod-card h4 {
+            color: #55FFFF;
+            /* Ciano/Diamante para os nomes dos Mods */
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-shadow: 2px 2px #003333;
+        }
+
+        /* Tag de Versão ou Categoria */
+        .mod-card .tag {
+            font-size: 15px;
+            font-family: 'Courier New', monospace;
+            padding: 5px 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: inline-block;
+
+            /* Fundo escuro para dar leitura ao texto claro */
+            background: #252525;
+            color: #fdfdfd;
+            /* Verde XP padrão */
+
+            /* Borda fina colorida que combina com o texto */
+            border: 1px solid #ffffff;
+
+            /* Efeito de profundidade (sombra) */
+            box-shadow: 2px 2px 0px #000;
+
+            /* Ajuste de alinhamento */
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+
+
+        .mod-card p {
+            font-size: 14px;
+            color: #DDD;
+            line-height: 1.5;
+        }
+
+        /* Rodapé do Card */
+        .mod-info {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #AAA;
+            border-top: 2px solid #333;
+            padding-top: 10px;
+        }
+
+        .mod-info b {
+            color: #FFAA00;
+            /* Laranja para destaques de versão/autor */
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container navbar">
+            <div class="logo">
+                <img src="assets/logo.png" alt="Logo">
+                <span>RAVENS REACH<br>RPG</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="mods.html" class="active">MODS</a></li>
+                    <li><a href="recursos.html">RECURSOS</a></li>
+                    <li><a href="quests.html">MISSÕES</a></li>
+                    <li><a href="classe.html">CLASSES</a></li>
+                    <li><a href="status.html">PLAYERS</a></li>
+                    <li><a href="#">STORE</a></li>
+
+                    <li id="user-logged-info" style="display: none; position: relative; list-style: none;">
+                        <div class="user-profile-nav" onclick="toggleDropdown()"
+                            style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px;">
+                            <img src="assets/default_steve.png" id="nav-avatar"
+                                style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid #a68a4c; object-fit: cover;">
+                            <span id="nav-username"
+                                style="font-weight: 800; text-transform: uppercase; color: #fff; letter-spacing: 1px;">CARREGANDO...</span>
+                            <div id="profile-dropdown"
+                                style="display: none; position: absolute; top: 110%; right: 0; background: #111; border: 1px solid #a68a4c; min-width: 180px; z-index: 10000;">
+                                <a href="perfil.html"
+                                    style="display: block; padding: 12px; color: white; text-decoration: none; font-size: 12px; border-bottom: 1px solid #222;">⚙️
+                                    CONFIGURAÇÕES</a>
+                                <a href="#" onclick="logout()"
+                                    style="display: block; padding: 12px; color: #ff4444; text-decoration: none; font-size: 12px;">🚪
+                                    SAIR DA CONTA</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mods-container">
+        <h1 style="text-align: center; color: #a68a4c;">WIKI DO MODPACK</h1>
+        
+        <h2 class="category-title">Sistemas Principais</h2>
+        <div class="mod-grid">
+            <div class="mod-card">
+                <h4>Spell Engine <span class="tag">MAGIA</span></h4>
+                <p>Cria a base do sistema de magia, adicionando classes e gerenciamento de mana.</p>
+                <div class="mod-info">
+                    <b>Impacto:</b> Muda o combate de espadas para estratégias mágicas complexas.
+                </div>
+            </div>
+
+            <div class="mod-card">
+                <h4>RPG Leveling & Stats <span class="tag">PROGRESSÃO</span></h4>
+                <p>Adiciona sistema de nível e atributos (Força, Agilidade, Defesa).</p>
+                <div class="mod-info">
+                    <b>Impacto:</b> Evolução real do personagem baseada em suas escolhas.
+                </div>
+            </div>
+
+            <div class="mod-card">
+                <h4>Sistema de Quests <span class="tag">OBJETIVOS</span></h4>
+                <p>Organiza o progresso através de missões guiadas e recompensas.</p>
+                <div class="mod-info">
+                    <b>Impacto:</b> Sempre existe um próximo objetivo claro para o jogador.
+                </div>
+            </div>
+        </div>
+
+        <h2 class="category-title">Combate e Equipamentos</h2>
+        <div class="mod-grid">
+            <div class="mod-card">
+                <h4>Wan’s Wonder Weapons <span class="tag">ARMAS</span></h4>
+                <p>Adiciona armas únicas com habilidades especiais e efeitos elementais.</p>
+                <div class="mod-info">
+                    <b>Exemplo:</b> Espadas que lançam projéteis ou dão bônus passivos.
+                </div>
+            </div>
+        </div>
+
+        <h2 class="category-title">Qualidade de Vida</h2>
+        <div class="mod-grid">
+            <div class="mod-card">
+                <h4>Gravestone <span class="tag">UTILIDADE</span></h4>
+                <p>Cria uma lápide no local da morte para proteger seus itens.</p>
+                <div class="mod-info">
+                    <b>Vantagem:</b> Reduz a frustração de perder progresso ao morrer.
+                </div>
+            </div>
+
+            <div class="mod-card">
+                <h4>Wayback Charm <span class="tag">UTILIDADE</span></h4>
+                <p>Permite retorno rápido para um local seguro ou sua base.</p>
+            </div>
+        </div>
+
+    </main>
+
+
+    <script src="script.js"></script>
+    <script src="footer.js"></script>
+</body>
+
+</html>
