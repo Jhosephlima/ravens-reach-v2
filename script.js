@@ -13,30 +13,7 @@ function closeAuth(modalId) {
     if (target) target.style.display = "none";
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    const menus = document.querySelectorAll("nav ul");
-    const currentPage = window.location.pathname.split("/").pop() || "index.html";
 
-    const menuItems = [
-        { name: "HOME", link: "index.html" },
-        { name: "MODS", link: "mods.html" },
-        { name: "RECURSOS", link: "recursos.html" },
-        { name: "MISSÕES", link: "quests.html" },
-        { name: "CLASSES", link: "classe.html" },
-        { name: "PLAYERS", link: "status.html" },
-        { name: "STORE", link: "store.html" }
-    ];
-
-    const menuHTML = menuItems.map(item => {
-        // Verifica se o link é a página atual para adicionar a classe 'active'
-        const isActive = (item.link === currentPage) ? 'class="active"' : '';
-        return `<li><a href="${item.link}" ${isActive}>${item.name}</a></li>`;
-    }).join('');
-
-    menus.forEach(menu => {
-        menu.innerHTML = menuHTML;
-    });
-});
 
 window.onclick = function (event) {
     if (event.target.classList.contains('auth-modal')) {
