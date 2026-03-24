@@ -116,5 +116,25 @@ app.delete('/deletar-conta', (req, res) => {
         }
     });
 });
+const util = require('mc-server-utilities');
+
+// Rota para o seu site saber se o Minecraft está aberto
+app.get('/status-mine', (req, res) => {
+    const serverIP = 'senior-packaging.gl.joinmc.link'; 
+    const serverPort = 25565; 
+
+    util.status(serverIP, serverPort)
+        .then((result) => {
+            res.json({
+                online: true,
+                players: result.players.online,
+                maxPlayers: result.players.max,
+                version: result.version.name
+            });
+        })
+        .catch((error) => {
+            res.json({ online: false, message: "Offline" });
+        });
+});
 
 app.listen(PORT, () => console.log(`🔥 Servidor Online na porta ${PORT}`));
