@@ -239,6 +239,35 @@ function solicitarExclusao() {
         });
     }
 }
+
+async function checkMinecraftStatus() {
+    try {
+        const response = await fetch('https://ravens-reach-v2.onrender.com/status-mine');
+        const data = await response.json();
+        
+        // Pegando os elementos do seu Portal de Status
+        const reinoStatus = document.getElementById('reino-status'); // Onde diz OFFLINE
+        const aventureirosText = document.getElementById('aventureiros-contagem'); // Onde diz 0 / 0
+        const latenciaText = document.getElementById('latencia-valor'); // Onde está o ---
+        
+        if (data.online) {
+            // Se estiver online, muda para Verde e atualiza os números
+            reinoStatus.innerHTML = "ONLINE";
+            reinoStatus.style.color = "#00ff00"; 
+            aventureirosText.innerHTML = `${data.players} / ${data.maxPlayers}`;
+            latenciaText.innerHTML = "Estável"; // Ou você pode calcular o tempo de resposta
+        } else {
+            // Se estiver offline
+            reinoStatus.innerHTML = "OFFLINE";
+            reinoStatus.style.color = "#ff4444";
+            aventureirosText.innerHTML = "0 / 0";
+            latenciaText.innerHTML = "---";
+        }
+    } catch (err) {
+        console.log("Erro ao conectar com o Portal de Status");
+    }
+}
+
 async function checkMinecraftStatus() {
     try {
         // Ele pergunta para o seu servidor no Render
