@@ -58,7 +58,7 @@ if (loginForm) {
         const username = document.getElementById('loginUser').value;
         const password = document.getElementById('loginPass').value;
         try {
-            const response = await fetch('http://localhost:3000/login', {
+            const response = await fetch('https://ravens-reach-v2.onrender.com/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
@@ -94,7 +94,7 @@ window.onload = async () => {
         if (usernameDisplay) usernameDisplay.innerText = loggedUser.toUpperCase();
 
         try {
-            const response = await fetch(`http://localhost:3000/get-profile/${loggedUser}`);
+            const response = await fetch(`https://ravens-reach-v2.onrender.com/get-profile/${loggedUser}`);
             const data = await response.json();
 
             if (response.ok) {
@@ -153,7 +153,7 @@ if (profileForm) profileForm.addEventListener('submit', async function(event) {
     }
 
     try {
-        const response = await fetch('http://localhost:3000/update-profile', {
+        const response = await fetch('https://ravens-reach-v2.onrender.com/update-profile', {
             method: 'POST',
             body: formData
         });
@@ -180,7 +180,7 @@ if (registerForm) {
         const password = document.getElementById('regPass').value;
 
         try {
-            const response = await fetch('http://localhost:3000/register', {
+            const response = await fetch('https://ravens-reach-v2.onrender.com/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, email, password })
@@ -218,7 +218,7 @@ function solicitarExclusao() {
     if (confirm("TEM CERTEZA? Esta ação não pode ser desfeita e você será deslogado imediatamente.")) {
         
         // O LINK CORRIGIDO! Agora ele acha o servidor.
-        fetch('http://localhost:3000/deletar-conta', {
+        fetch('https://ravens-reach-v2.onrender.com/deletar-conta', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: username, senha: senha })
