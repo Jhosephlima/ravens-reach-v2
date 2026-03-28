@@ -120,7 +120,7 @@ const util = require('mc-server-utilities');
 
 // Rota para o seu site saber se o Minecraft está aberto
 app.get('/status-mine', (req, res) => {
-    const serverIP = 'senior-packaging.gl.joinmc.link'; 
+    const serverIP = 'fat-development.gl.joinmc.link'; 
     const serverPort = 25565; 
 
     util.status(serverIP, serverPort)
