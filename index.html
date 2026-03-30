@@ -195,57 +195,52 @@
     async function checkServerStatus() {
         const statusText = document.getElementById('status-servidor');
         const indicator = document.getElementById('status-indicator');
-        const playerCount = document.getElementById('real-player-count');
+        const playerCountEl = document.getElementById('real-player-count'); // O "00" da Home
         const capacityFill = document.getElementById('capacity-fill');
 
         try {
-            // Usando a API mcapi.us que costuma ser mais rápida para túneis como joinmc
-            const response = await fetch(`https://mcapi.us/server/status?ip=${SERVER_IP}`);
-            const data = await response.json();
+            // Usando a mesma API (mcstatus.io) que funciona na sua outra página
+            const res = await fetch(`https://api.mcstatus.io/v2/status/java/${SERVER_IP}`);
+            const data = await res.json();
 
             if (data.online) {
-                statusText.innerHTML = `<span style="color: #55FF55;">● ONLINE</span> <small style="color: #888;">(${data.players.now}/${data.players.max})</small>`;
+                // Atualiza o texto e a bolinha
+                statusText.innerHTML = `<span style="color: #55FF55;">● ONLINE</span> <small style="color: #888;">(${data.players.online}/${data.players.max})</small>`;
                 indicator.style.background = "#55FF55";
                 indicator.style.boxShadow = "0 0 15px #55FF55";
                 
-                // Atualiza o contador de jogadores (o 00 que estava travado)
-                if (playerCount) {
-                    playerCount.innerText = data.players.now.toString().padStart(2, '0');
+                // Atualiza o contador grande de jogadores ("00" -> "01")
+                if (playerCountEl) {
+                    playerCountEl.innerText = data.players.online.toString().padStart(2, '0');
                 }
                 
-                // Atualiza a barra de progresso
+                // Atualiza a barra de capacidade
                 if (capacityFill) {
-                    let percent = (data.players.now / data.players.max) * 100;
-                    capacityFill.style.width = (percent > 0 ? percent : 5) + "%"; // Mínimo de 5% para aparecer algo
+                    let percent = (data.players.online / data.players.max) * 100;
+                    capacityFill.style.width = (percent > 0 ? percent : 2) + "%"; 
                 }
             } else {
-                // Se der erro na primeira API, tentamos a mcsrvstat como backup
-                const resBackup = await fetch(`https://api.mcsrvstat.us/2/${SERVER_IP}`);
-                const dataBackup = await resBackup.json();
-                
-                if (dataBackup.online) {
-                    statusText.innerHTML = `<span style="color: #55FF55;">● ONLINE</span>`;
-                    indicator.style.background = "#55FF55";
-                } else {
-                    statusText.innerHTML = `<span style="color: #FF5555;">● OFFLINE</span>`;
-                    indicator.style.background = "#FF5555";
-                    indicator.style.boxShadow = "none";
-                }
+                statusText.innerHTML = `<span style="color: #FF5555;">● OFFLINE</span>`;
+                indicator.style.background = "#FF5555";
+                indicator.style.boxShadow = "none";
+                if (playerCountEl) playerCountEl.innerText = "00";
+                if (capacityFill) capacityFill.style.width = "0%";
             }
-        } catch (error) {
-            console.log("Erro ao buscar status:", error);
-            statusText.innerText = "Erro na conexão";
+        } catch (err) {
+            console.error("Erro na Home:", err);
+            statusText.innerText = "ERRO DE CONEXÃO";
         }
     }
 
+    // Função de copiar IP
     function copyIP() {
         navigator.clipboard.writeText(SERVER_IP);
-        alert("IP Copiado com sucesso!");
+        alert("IP Copiado: " + SERVER_IP);
     }
 
-    // Executa ao carregar e a cada 30 segundos
+    // Inicia e define intervalo de 15 segundos (igual à outra página)
     checkServerStatus();
-    setInterval(checkServerStatus, 30000);
+    setInterval(checkServerStatus, 15000);
 </script>
 
     <script src="script.js"></script>
