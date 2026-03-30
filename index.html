@@ -189,54 +189,64 @@
         </div>
     </div>
 
-    <script>
-        const SERVER_IP = "fat-development.gl.joinmc.link";
+<script>
+    const SERVER_IP = "fat-development.gl.joinmc.link";
 
-        async function checkServerStatus() {
-            const statusText = document.getElementById('status-servidor');
-            const indicator = document.getElementById('status-indicator');
-            const playerCount = document.getElementById('real-player-count');
-            const capacityFill = document.getElementById('capacity-fill');
+    async function checkServerStatus() {
+        const statusText = document.getElementById('status-servidor');
+        const indicator = document.getElementById('status-indicator');
+        const playerCount = document.getElementById('real-player-count');
+        const capacityFill = document.getElementById('capacity-fill');
 
-            try {
-                const response = await fetch(`https://api.mcsrvstat.us/2/${SERVER_IP}`);
-                const data = await response.json();
+        try {
+            // Usando a API mcapi.us que costuma ser mais rápida para túneis como joinmc
+            const response = await fetch(`https://mcapi.us/server/status?ip=${SERVER_IP}`);
+            const data = await response.json();
 
-                if (data.online) {
-                    statusText.innerHTML = `<span style="color: #55FF55;">● ONLINE</span> <small style="color: #888;">(${data.players.online}/${data.players.max})</small>`;
+            if (data.online) {
+                statusText.innerHTML = `<span style="color: #55FF55;">● ONLINE</span> <small style="color: #888;">(${data.players.now}/${data.players.max})</small>`;
+                indicator.style.background = "#55FF55";
+                indicator.style.boxShadow = "0 0 15px #55FF55";
+                
+                // Atualiza o contador de jogadores (o 00 que estava travado)
+                if (playerCount) {
+                    playerCount.innerText = data.players.now.toString().padStart(2, '0');
+                }
+                
+                // Atualiza a barra de progresso
+                if (capacityFill) {
+                    let percent = (data.players.now / data.players.max) * 100;
+                    capacityFill.style.width = (percent > 0 ? percent : 5) + "%"; // Mínimo de 5% para aparecer algo
+                }
+            } else {
+                // Se der erro na primeira API, tentamos a mcsrvstat como backup
+                const resBackup = await fetch(`https://api.mcsrvstat.us/2/${SERVER_IP}`);
+                const dataBackup = await resBackup.json();
+                
+                if (dataBackup.online) {
+                    statusText.innerHTML = `<span style="color: #55FF55;">● ONLINE</span>`;
                     indicator.style.background = "#55FF55";
-                    indicator.style.boxShadow = "0 0 10px #55FF55";
-                    
-                    // Atualiza o contador de jogadores e a barra
-                    playerCount.innerText = data.players.online.toString().padStart(2, '0');
-                    let percent = (data.players.online / data.players.max) * 100;
-                    capacityFill.style.width = percent + "%";
                 } else {
                     statusText.innerHTML = `<span style="color: #FF5555;">● OFFLINE</span>`;
                     indicator.style.background = "#FF5555";
                     indicator.style.boxShadow = "none";
-                    playerCount.innerText = "00";
-                    capacityFill.style.width = "0%";
                 }
-            } catch (error) {
-                statusText.innerText = "Erro ao carregar";
             }
+        } catch (error) {
+            console.log("Erro ao buscar status:", error);
+            statusText.innerText = "Erro na conexão";
         }
+    }
 
-        function copyIP() {
-            navigator.clipboard.writeText(SERVER_IP);
-            alert("IP Copiado: " + SERVER_IP + "\nCola no teu Minecraft!");
-        }
+    function copyIP() {
+        navigator.clipboard.writeText(SERVER_IP);
+        alert("IP Copiado com sucesso!");
+    }
 
-        // Dropdown toggle
-        function toggleDropdown() {
-            const dropdown = document.getElementById('profile-dropdown');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-        }
-
-        checkServerStatus();
-        setInterval(checkServerStatus, 30000);
-    </script>
+    // Executa ao carregar e a cada 30 segundos
+    checkServerStatus();
+    setInterval(checkServerStatus, 30000);
+</script>
 
     <script src="script.js"></script>
     <script src="footer.js"></script>
